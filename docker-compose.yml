@@ -1,0 +1,33 @@
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    ports:
+      - "18080:8080"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ANALYTICS_ACTIVE_WINDOW_SECONDS: 300
+      ANALYTICS_PAGE_WINDOW_SECONDS: 900
+      EVENTS_RATE_LIMIT_PER_SECOND: 100
+    depends_on:
+      - redis
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+  data-generator:
+    build: ./data-generator
+    environment:
+      BACKEND_URL: http://backend:8080/api/events
+      EVENTS_PER_SECOND: 100
+    depends_on:
+      - backend

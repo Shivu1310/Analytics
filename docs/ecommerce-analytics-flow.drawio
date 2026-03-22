@@ -1,0 +1,35 @@
+<mxfile host="app.diagrams.net" modified="2026-03-22T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="arch-1" name="Ecommerce Analytics Flow">
+    <mxGraphModel dx="1280" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="dg" value="Mock Data Generator\n(Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="70" y="120" width="190" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="be" value="Backend API\n(Spring Boot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="350" y="120" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="rd" value="Redis\n(Rolling Aggregations)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="640" y="120" width="220" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="fe" value="Frontend Dashboard\n(Angular)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="350" y="280" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" value="POST /api/events\n~100 events/sec" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1" source="dg" target="be">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="Validate + Rate Limit" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1" source="be" target="rd">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="GET /api/metrics\nevery 30s" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" edge="1" parent="1" source="fe" target="be">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="Metrics JSON" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;" edge="1" parent="1" source="be" target="fe">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
