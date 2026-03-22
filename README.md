@@ -44,9 +44,6 @@ flowchart LR
     FE["Frontend Dashboard (Angular)"] -->|"GET /api/metrics every 30s"| BE
     BE -->|"Metrics JSON"| FE
 ```
-
-Draw.io source file: [docs/ecommerce-analytics-flow.drawio](/Users/shivaniagarwal/Downloads/analytics/docs/ecommerce-analytics-flow.drawio)
-
 ### Data model and windows
 
 - Active users: Redis sorted set, rolling 5-minute window
