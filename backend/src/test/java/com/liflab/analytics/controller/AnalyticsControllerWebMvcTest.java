@@ -6,6 +6,7 @@ import com.liflab.analytics.model.DashboardMetrics;
 import com.liflab.analytics.model.PageMetric;
 import com.liflab.analytics.service.AnalyticsService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,7 +52,15 @@ class AnalyticsControllerWebMvcTest {
                         .content(objectMapper.writeValueAsString(event)))
                 .andExpect(status().isAccepted());
 
-        verify(analyticsService).recordEvent(event);
+        ArgumentCaptor<AnalyticsEvent> eventCaptor = ArgumentCaptor.forClass(AnalyticsEvent.class);
+        verify(analyticsService).recordEvent(eventCaptor.capture());
+
+        AnalyticsEvent captured = eventCaptor.getValue();
+        assertEquals(event.getTimestamp(), captured.getTimestamp());
+        assertEquals(event.getUserId(), captured.getUserId());
+        assertEquals(event.getEventType(), captured.getEventType());
+        assertEquals(event.getPageUrl(), captured.getPageUrl());
+        assertEquals(event.getSessionId(), captured.getSessionId());
     }
 
     @Test

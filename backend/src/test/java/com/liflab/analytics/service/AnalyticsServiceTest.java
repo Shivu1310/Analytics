@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -33,7 +32,7 @@ class AnalyticsServiceTest {
 
     private StringRedisTemplate redisTemplate;
     private ZSetOperations<String, String> zSetOperations;
-    private HashOperations<String, String, String> hashOperations;
+    private HashOperations<String, Object, Object> hashOperations;
     private AnalyticsService analyticsService;
 
     @SuppressWarnings("unchecked")
@@ -60,14 +59,14 @@ class AnalyticsServiceTest {
 
         analyticsService.recordEvent(event);
 
-        verify(zSetOperations).add(eq("analytics:active_users"), eq("usr_789"), anyLong());
-        verify(zSetOperations).add(eq("analytics:active_sessions"), eq("sess_456|usr_789"), anyLong());
+        verify(zSetOperations).add(eq("analytics:active_users"), eq("usr_789"), anyDouble());
+        verify(zSetOperations).add(eq("analytics:active_sessions"), eq("sess_456|usr_789"), anyDouble());
         verify(zSetOperations).add(eq("analytics:page_event_timeline"), anyString(), anyDouble());
         verify(hashOperations).put(eq("analytics:page_event_data"), anyString(), eq("/products/electronics"));
 
         verify(zSetOperations).removeRangeByScore(eq("analytics:active_users"), eq(0.0), anyDouble());
         verify(zSetOperations).removeRangeByScore(eq("analytics:active_sessions"), eq(0.0), anyDouble());
-        verify(zSetOperations).removeRangeByScore(eq("analytics:page_event_timeline"), eq(0.0), anyDouble());
+        verify(zSetOperations).rangeByScore(eq("analytics:page_event_timeline"), eq(0.0), anyDouble());
     }
 
     @Test

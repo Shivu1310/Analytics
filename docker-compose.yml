@@ -29,5 +29,6 @@ services:
     environment:
       BACKEND_URL: http://backend:8080/api/events
       EVENTS_PER_SECOND: 100
+      LOG_EVERY_N: 100
     depends_on:
       - backend
